@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener Admin</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+        }
+        .form-section {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="url"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button[type="submit"][value="delete"] {
+            background: #dc3545;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        button[type="submit"][value="delete"]:hover {
+            background: #c82333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+        .url-cell {
+            max-width: 400px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>URL Shortener Admin Panel</h1>
+
+    <div class="form-section">
+        <h2>Add/Update Short URL</h2>
+        <form method="post">
+            <div class="form-group">
+                <label for="password">Admin Password:</label>
+                <input type="password" id="main-password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="short_code">Short Code:</label>
+                <input type="text" id="short_code" name="short_code" placeholder="e.g., gh" required>
+                <small>This will be the path after your domain (e.g., parasmittal.com/gh)</small>
+            </div>
+            <div class="form-group">
+                <label for="long_url">Long URL:</label>
+                <input type="url" id="long_url" name="long_url" placeholder="https://example.com/very/long/url" required>
+            </div>
+            <input type="hidden" name="action" value="add">
+            <button type="submit">Add/Update URL</button>
+        </form>
+    </div>
+
+    <h2>Existing Short URLs</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Short Code</th>
+                <th>Long URL</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{url_rows}}
+        </tbody>
+    </table>
+
+    <script>
+        // Store password in memory for delete operations
+        const passwordInput = document.getElementById('main-password');
+    </script>
+</body>
+</html>
