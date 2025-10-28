@@ -18,8 +18,6 @@ def application(environ, start_response):
     Returns:
         Iterable of bytes to send as response body
     """
-    # Initialize database on first request
-    # db.init_db()
     print("Received request:", environ.get('PATH_INFO', ''))
 
     path = environ.get('PATH_INFO', '/')
@@ -43,7 +41,7 @@ def handle_redirect(environ, start_response, path):
         return [b'Not Found']
 
     # Look up the URL
-    long_url = db.get_url(short_code)
+    long_url = db.get_long_url(short_code)
 
     if long_url:
         # Redirect to the long URL

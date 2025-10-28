@@ -29,7 +29,7 @@ def init_db():
     conn.close()
 
 
-def get_url(short_code: str) -> Optional[str]:
+def get_long_url(short_code: str) -> Optional[str]:
     """Get the long URL for a given short code."""
     conn = get_connection()
     cursor = conn.cursor()

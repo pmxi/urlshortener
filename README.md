@@ -236,10 +236,6 @@ If you get `ModuleNotFoundError: No module named 'urlshortener'`:
 - Make sure you're using `uv run` to run commands
 - OR activate the virtual environment: `source .venv/bin/activate`
 
-### Database Errors
-
-If the database gets corrupted, simply delete `urls.db` and restart the server. A new database will be created automatically.
-
 ### Permission Errors
 
 Make sure the application has write permissions to create `urls.db` in the project directory (or wherever `DB_PATH` points).
