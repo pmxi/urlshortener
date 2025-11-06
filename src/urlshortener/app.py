@@ -134,17 +134,18 @@ def get_admin_html() -> str:
         # Generate URL list HTML
         url_rows = ''
         for url_data in urls:
+            short_code = url_data['short_code']
             url_rows += f"""
             <tr>
-                <td>{url_data['short_code']}</td>
+                <td>{short_code}</td>
                 <td>{url_data['long_url']}</td>
                 <td>{url_data['created_at']}</td>
                 <td>
                     <form method="post" style="display:inline;">
-                        <input type="hidden" name="password" id="delete-password-{url_data['short_code']}">
+                        <input type="hidden" name="password" id="delete-password-{short_code}">
                         <input type="hidden" name="action" value="delete">
-                        <input type="hidden" name="short_code" value="{url_data['short_code']}">
-                        <button type="submit" onclick="document.getElementById('delete-password-{url_data['short_code']}').value = document.getElementById('main-password').value;">Delete</button>
+                        <input type="hidden" name="short_code" value="{short_code}">
+                        <button type="submit" onclick="document.getElementById('delete-password-{short_code}').value = document.getElementById('main-password').value;">Delete</button>
                     </form>
                 </td>
             </tr>
