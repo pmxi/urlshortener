@@ -13,6 +13,10 @@ def get_connection():
     conn.row_factory = sqlite3.Row
     try:
         yield conn
+    except Exception:
+        conn.rollback()
+        raise
+    else:
         conn.commit()
     finally:
         conn.close()
