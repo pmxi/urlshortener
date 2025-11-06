@@ -5,6 +5,17 @@ from urllib.parse import parse_qs
 from urlshortener import db, auth
 
 
+def send_response(start_response, status, body, content_type='text/plain'):
+    """Helper function to send HTTP responses."""
+    body_bytes = body if isinstance(body, bytes) else body.encode('utf-8')
+    headers = [
+        ('Content-Type', content_type),
+        ('Content-Length', str(len(body_bytes)))
+    ]
+    start_response(status, headers)
+    return [body_bytes]
+
+
 def application(environ, start_response):
     """
     WSGI application entry point.
@@ -37,8 +48,7 @@ def handle_redirect(environ, start_response, path):
 
     if not short_code:
         # Root path - return 404
-        start_response('404 Not Found', [('Content-Type', 'text/plain')])
-        return [b'Not Found']
+        return send_response(start_response, '404 Not Found', 'Not Found')
 
     # Look up the URL
     long_url = db.get_long_url(short_code)
@@ -49,8 +59,7 @@ def handle_redirect(environ, start_response, path):
         return [b'']
     else:
         # Not found
-        start_response('404 Not Found', [('Content-Type', 'text/plain')])
-        return [b'Short URL not found']
+        return send_response(start_response, '404 Not Found', 'Short URL not found')
 
 
 def handle_admin(environ, start_response):
@@ -60,19 +69,14 @@ def handle_admin(environ, start_response):
     if method == 'GET':
         # Show admin panel
         html = get_admin_html()
-        start_response('200 OK', [
-            ('Content-Type', 'text/html; charset=utf-8'),
-            ('Content-Length', str(len(html)))
-        ])
-        return [html.encode('utf-8')]
+        return send_response(start_response, '200 OK', html, 'text/html; charset=utf-8')
 
     elif method == 'POST':
         # Handle form submission
         return handle_admin_post(environ, start_response)
 
     else:
-        start_response('405 Method Not Allowed', [('Content-Type', 'text/plain')])
-        return [b'Method Not Allowed']
+        return send_response(start_response, '405 Method Not Allowed', 'Method Not Allowed')
 
 
 def handle_admin_post(environ, start_response):
@@ -89,8 +93,7 @@ def handle_admin_post(environ, start_response):
 
         # Check password
         if not auth.check_password(password):
-            start_response('401 Unauthorized', [('Content-Type', 'text/plain')])
-            return [b'Invalid password']
+            return send_response(start_response, '401 Unauthorized', 'Invalid password')
 
         # Handle different actions
         if action == 'add':
@@ -110,8 +113,7 @@ def handle_admin_post(environ, start_response):
         return [b'']
 
     except Exception as e:
-        start_response('500 Internal Server Error', [('Content-Type', 'text/plain')])
-        return [f'Error: {str(e)}'.encode('utf-8')]
+        return send_response(start_response, '500 Internal Server Error', f'Error: {str(e)}')
 
 
 def get_admin_html() -> str:
