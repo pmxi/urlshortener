@@ -13,7 +13,7 @@ def get_connection():
     conn.row_factory = sqlite3.Row
     try:
         yield conn
-    except Exception:
+    except sqlite3.Error:
         conn.rollback()
         raise
     else:
